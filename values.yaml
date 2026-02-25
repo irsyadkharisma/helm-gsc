@@ -20,6 +20,8 @@ volumes: &common-volumes # this comes from the config initContainer
   # /tmp as emptyDir, required if running with readOnlyRootFilesystem=true
   tmp-empty-dir:
     emptyDir: {}
+  gs-data-dir:
+    emptyDir: {}
 
 volumeMounts: &common-volume-mounts
   /etc/localconfig:
@@ -27,31 +29,35 @@ volumeMounts: &common-volume-mounts
   # /tmp as emptyDir, required if running with readOnlyRootFilesystem=true
   /tmp/:
     name: 'tmp-empty-dir'
+  /opt/app/data_directory:
+    name: gs-data-dir
 
 ports: &common-ports
   http:
     containerPort: 8080
-    hostIP: 127.0.0.1
+      #    hostIP: 127.0.0.1
   health:
     containerPort: 8081
-    hostIP: 127.0.0.1
+      #    hostIP: 127.0.0.1
 
 resources: &common-resources
   requests:
-    memory: 512Mi
-    cpu: 0.1
+    memory: 256Mi
+    cpu: 0.5
   limits:
-    memory: 4Gi
-    cpu: 4.0
+    memory: 1Gi
+    cpu: 1
 
 env: &common-env
   GEOSERVER_BASE_PATH:
     # NB: do not put a trailing '/' character
     value: '/geoserver-cloud'
+  SERVER_FORWARD_HEADERS_STRATEGY:
+    value: framework
   SPRING_PROFILES_ACTIVE:
     # this must be explicitly overridden with either
     # "standalone,jdbcconfig,kube" or "standalone,datadir,kube"
-    value: not-set
+    value: "standalone,datadir,kube"
   GWC_ENABLED:
     value: 'true'
   JAVA_OPTS_DEFAULT:
@@ -156,7 +162,7 @@ geoserver-spring-livenessProbe: &geoserver-spring-livenessProbe
   httpGet:
     path: /actuator/health/liveness
     port: health
-  periodSeconds: 10
+  periodSeconds: 5
   failureThreshold: 10
   initialDelaySeconds: 60
 geoserver-spring-readinessProbe: &geoserver-spring-readinessProbe
@@ -164,6 +170,8 @@ geoserver-spring-readinessProbe: &geoserver-spring-readinessProbe
     path: /actuator/health/readiness
     port: health
   periodSeconds: 5
+  failureThreshold: 10
+  initialDelaySeconds: 60
 
 common-generic-stuff: &common-generic-stuff
   releaseTrunc: 45
@@ -180,7 +188,7 @@ geoserver:
   metadata:
     enabled: true
   securityContext:
-    readOnlyRootFilesystem: true
+    readOnlyRootFilesystem: false
     allowPrivilegeEscalation: false
   ingress:
     enabled: false
@@ -209,6 +217,15 @@ geoserver:
   services:
     gateway:
       enabled: true
+      service:
+        type: NodePort
+        servicePort: 8080
+        ports:
+          - name: http
+            port: 8080
+            protocol: TCP
+            targetPort: http
+            nodePort: 30080
       ingress:
         # NB: if .Values.gscloud.ingress.enabled=true put true here as well
         enabled: false
@@ -250,7 +267,8 @@ geoserver:
             repository: geoservercloud/geoserver-cloud-webui
             sha: ''
     rest:
-      enabled: true
+      #enabled: true
+      enabled: false
       ingress:
         enabled: false
       <<: *common-generic-stuff
@@ -270,7 +288,8 @@ geoserver:
             repository: geoservercloud/geoserver-cloud-rest
             sha: ''
     wfs:
-      enabled: true
+      #enabled: true
+      enabled: false
       ingress:
         enabled: false
       <<: *common-generic-stuff
@@ -290,7 +309,8 @@ geoserver:
             repository: geoservercloud/geoserver-cloud-wfs
             sha: ''
     wms:
-      enabled: true
+      #enabled: true
+      enabled: false
       ingress:
         enabled: false
       <<: *common-generic-stuff
@@ -310,7 +330,8 @@ geoserver:
             repository: geoservercloud/geoserver-cloud-wms
             sha: ''
     wcs:
-      enabled: true
+      #enabled: true
+      enabled: false      
       ingress:
         enabled: false
       <<: *common-generic-stuff
@@ -330,7 +351,8 @@ geoserver:
             repository: geoservercloud/geoserver-cloud-wcs
             sha: ''
     wps:
-      enabled: false
+      #enabled: true
+      enabled: false      
       ingress:
         enabled: false
       <<: *common-generic-stuff
@@ -350,7 +372,8 @@ geoserver:
             repository: geoservercloud/geoserver-cloud-wps
             sha: ''
     gwc:
-      enabled: true
+      #enabled: true
+      enabled: false
       ingress:
         enabled: false
       <<: *common-generic-stuff

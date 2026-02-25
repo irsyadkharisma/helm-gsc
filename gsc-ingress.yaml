@@ -1,0 +1,18 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: gsc-gateway
+  namespace: geoserver-cloud
+spec:
+  ingressClassName: traefik
+  rules:
+    - host: geovm.wri-indonesia.id
+      http:
+        paths:
+          - path: /geoserver-cloud
+            pathType: Prefix
+            backend:
+              service:
+                name: gsc-gsc-gateway
+                port:
+                  number: 8080
