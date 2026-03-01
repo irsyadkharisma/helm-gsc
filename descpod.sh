@@ -10,5 +10,5 @@ fi
 POD_NAME=$1
 NAMESPACE="geoserver-cloud"
 
-efcho ">> Describing pod: $POD_NAME (namespace: $NAMESPACE)"
+echo ">> Describing pod: $POD_NAME (namespace: $NAMESPACE)"
 kubectl describe pod  "$POD_NAME" -n "$NAMESPACE"

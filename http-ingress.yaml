@@ -1,0 +1,19 @@
+geoserver:
+  ingress:
+    enabled: true
+    annotations:
+      kubernetes.io/ingress.class: traefik
+      traefik.ingress.kubernetes.io/router.entrypoints: web
+    hostGroups:
+      host1:
+        tls:
+          enabled: false
+        hosts:
+          - geovm.wri-indonesia.id
+
+  services:
+    gateway:
+      ingress:
+        enabled: true
+        path: /geoserver-cloud/
+

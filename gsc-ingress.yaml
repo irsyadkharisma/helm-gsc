@@ -3,8 +3,15 @@ kind: Ingress
 metadata:
   name: gsc-gateway
   namespace: geoserver-cloud
+  annotations:
+    traefik.ingress.kubernetes.io/router.entrypoints: websecure
+    traefik.ingress.kubernetes.io/router.tls: "true"
 spec:
   ingressClassName: traefik
+  tls:
+    - hosts:
+        - geovm.wri-indonesia.id
+      secretName: geoservercloud-tls
   rules:
     - host: geovm.wri-indonesia.id
       http:
@@ -13,6 +20,6 @@ spec:
             pathType: Prefix
             backend:
               service:
-                name: gsc-gsc-gateway
+                name: gsc-gsc-gateway 
                 port:
                   number: 8080

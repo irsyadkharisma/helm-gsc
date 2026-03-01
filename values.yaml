@@ -35,10 +35,10 @@ volumeMounts: &common-volume-mounts
 ports: &common-ports
   http:
     containerPort: 8080
-      #    hostIP: 127.0.0.1
+    hostIP: 127.0.0.1
   health:
     containerPort: 8081
-      #    hostIP: 127.0.0.1
+    hostIP: 127.0.0.1
 
 resources: &common-resources
   requests:
@@ -267,8 +267,8 @@ geoserver:
             repository: geoservercloud/geoserver-cloud-webui
             sha: ''
     rest:
-      #enabled: true
-      enabled: false
+      enabled: true
+        #enabled: false
       ingress:
         enabled: false
       <<: *common-generic-stuff
@@ -288,8 +288,8 @@ geoserver:
             repository: geoservercloud/geoserver-cloud-rest
             sha: ''
     wfs:
-      #enabled: true
-      enabled: false
+      enabled: true
+        #enabled: false
       ingress:
         enabled: false
       <<: *common-generic-stuff
@@ -309,8 +309,8 @@ geoserver:
             repository: geoservercloud/geoserver-cloud-wfs
             sha: ''
     wms:
-      #enabled: true
-      enabled: false
+      enabled: true
+        #enabled: false
       ingress:
         enabled: false
       <<: *common-generic-stuff
@@ -330,8 +330,8 @@ geoserver:
             repository: geoservercloud/geoserver-cloud-wms
             sha: ''
     wcs:
-      #enabled: true
-      enabled: false      
+      enabled: true
+        #enabled: false      
       ingress:
         enabled: false
       <<: *common-generic-stuff
@@ -351,8 +351,8 @@ geoserver:
             repository: geoservercloud/geoserver-cloud-wcs
             sha: ''
     wps:
-      #enabled: true
-      enabled: false      
+      enabled: true
+      #enabled: false      
       ingress:
         enabled: false
       <<: *common-generic-stuff
@@ -372,8 +372,8 @@ geoserver:
             repository: geoservercloud/geoserver-cloud-wps
             sha: ''
     gwc:
-      #enabled: true
-      enabled: false
+      enabled: true
+        #enabled: false
       ingress:
         enabled: false
       <<: *common-generic-stuff
