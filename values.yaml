@@ -147,6 +147,14 @@ env: &common-env
     value: 'http://$(SERVICE_ACL_NAME):8080/acl/api'
   ACL_USERNAME:
     value: 'geoserver'
+  RABBITMQ_HOST:
+    value: 'rmq-rabbitmq.geoserver-cloud.svc.cluster.local'
+  RABBITMQ_PORT:
+    value: "5672"
+  RABBITMQ_USER:
+    value: "geoserver"
+  RABBITMQ_PASSWORD:
+    value: "sodAgemb7r4$"
 
 common-spring-container-stuff: &common-spring-container-stuff
   resources:

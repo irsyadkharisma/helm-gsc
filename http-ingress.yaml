@@ -1,19 +1,21 @@
-geoserver:
-  ingress:
-    enabled: true
-    annotations:
-      kubernetes.io/ingress.class: traefik
-      traefik.ingress.kubernetes.io/router.entrypoints: web
-    hostGroups:
-      host1:
-        tls:
-          enabled: false
-        hosts:
-          - geovm.wri-indonesia.id
-
-  services:
-    gateway:
-      ingress:
-        enabled: true
-        path: /geoserver-cloud/
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: gsc-gateway
+  namespace: geoserver-cloud
+  annotations:
+    traefik.ingress.kubernetes.io/router.entrypoints: web
+spec:
+  ingressClassName: traefik
+  rules:
+    - host: geovm.wri-indonesia.id
+      http:
+        paths:
+          - path: /geoserver-cloud/
+            pathType: Prefix
+            backend:
+              service:
+                name: gsc-gsc-gateway
+                port:
+                  number: 8080
 
