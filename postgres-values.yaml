@@ -1,0 +1,20 @@
+auth:
+  postgresPassword: "postgres123"
+  username: "geoserver"
+  password: "geoserver123"
+  database: "geoserver"
+
+primary:
+  persistence:
+    enabled: true
+    storageClass: local-path
+    size: 20Gi
+
+  resources:
+    requests:
+      cpu: "250m"
+      memory: "512Mi"
+    limits:
+      cpu: "1"
+      memory: "1Gi"
+

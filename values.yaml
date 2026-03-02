@@ -57,7 +57,7 @@ env: &common-env
   SPRING_PROFILES_ACTIVE:
     # this must be explicitly overridden with either
     # "standalone,jdbcconfig,kube" or "standalone,datadir,kube"
-    value: "standalone,datadir,kube"
+    value: "standalone,jdbcconfig,kube"
   GWC_ENABLED:
     value: 'true'
   JAVA_OPTS_DEFAULT:
@@ -156,6 +156,38 @@ env: &common-env
   RABBITMQ_PASSWORD:
     value: "sodAgemb7r4$"
 
+  GEOSERVER_SECURITY_ENVIRONMENT_ADMIN_USERNAME:
+    value: "superadmin"
+  GEOSERVER_SECURITY_ENVIRONMENT_ADMIN_PASSWORD:
+    value: "SuperTemp123!"
+
+env-jdbc: &env-jdbc
+  JDBCCONFIG_DATABASE:
+    type: secret
+    name: gs-cloud-jdbc-db
+    key: database
+  JDBCCONFIG_HOST:
+    type: secret
+    name: gs-cloud-jdbc-db
+    key: hostname
+  JDBCCONFIG_USERNAME:
+    type: secret
+    name: gs-cloud-jdbc-db
+    key: username
+  JDBCCONFIG_PASSWORD:
+    type: secret
+    name: gs-cloud-jdbc-db
+    key: password
+  JDBCCONFIG_PORT:
+    type: secret
+    name: gs-cloud-jdbc-db
+    key: port
+  JDBCCONFIG_SCHEMA:
+    type: secret
+    name: gs-cloud-jdbc-db
+    key: schema
+
+  
 common-spring-container-stuff: &common-spring-container-stuff
   resources:
     <<: *common-resources
@@ -164,7 +196,8 @@ common-spring-container-stuff: &common-spring-container-stuff
   volumeMounts:
     <<: *common-volume-mounts
   env:
-    <<: *common-env
+    <<: [*common-env, *env-jdbc]
+
 
 geoserver-spring-livenessProbe: &geoserver-spring-livenessProbe
   httpGet:
